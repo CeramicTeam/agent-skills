@@ -1,0 +1,13 @@
+{
+  "name": "ceramic-search",
+  "version": "1.1.0",
+  "description": "High quality web search for AI agents using Ceramic",
+  "author": {
+    "name": "Ceramic AI"
+  },
+  "homepage": "https://docs.ceramic.ai",
+  "repository": "https://github.com/CeramicTeam/agent-skills",
+  "license": "MIT",
+  "skills": "./skills",
+  "mcpServers": "./.mcp.json"
+}
