@@ -60,6 +60,8 @@ If your agent also has the Ceramic MCP server configured, the skill uses the MCP
 
 3. Start a new Claude Code session. On first use, Claude Code opens a browser window to sign in with Ceramic.
 
+If you installed the plugin from `CeramicTeam/ceramic-claude-code-plugins`, run step 1, then `claude plugin update ceramic-search@ceramic-ai` and restart Claude Code.
+
 ## Install the Codex plugin
 
 1. Register the marketplace:
@@ -77,6 +79,8 @@ If your agent also has the Ceramic MCP server configured, the skill uses the MCP
    ```
 
 3. Start a new Codex session.
+
+If you installed the plugin from `CeramicTeam/ceramic-codex-plugins`, remove that marketplace before step 1 with `codex plugin marketplace remove ceramic-ai`. Your installed plugin updates the next time you start Codex.
 
 ## Links
 
