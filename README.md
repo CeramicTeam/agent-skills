@@ -34,7 +34,7 @@ Requires [Node.js](https://nodejs.org) and a Ceramic API key.
    npx skills add CeramicTeam/agent-skills
    ```
 
-   The installer detects the coding agents on your machine and asks where to install the skill. For the installation scope, choose **Global** to use the skill in every project, or **Project** to install it only in the folder you ran the command from.
+   The installer detects the coding agents on your machine and asks where to install the skill.
 
 3. Start a new agent session and ask for something that needs current information from the web.
 
