@@ -1,45 +1,44 @@
 ---
 name: ceramic-search
-description: Web search for AI agents using Ceramic. Use for accurate current information — news, prices, recent events, documentation, general fact checking. Trigger this skill for keywords like "latest", "recent", "look up", "search for", "find online", "what's happening".
+description: Use this skill when the user needs current or verifiable information from the web — news, recent events, prices, releases, product or API documentation, or fact checks — even if they don't explicitly ask to search. Searches with Ceramic, a keyword-based web search engine. Not for questions answerable from the local codebase or files.
 ---
 
 # Ceramic Search
 
-Lexical (keyword-based) search engine built for AI agents.
+Ceramic is a lexical (keyword-based) web search engine built for AI agents. It matches exact words and phrases — it does not infer intent, synonyms, or missing context from a vague query.
 
 # Usage
 
-1. **Rewrite the natural language query**
+1. **Rewrite the question as keyword queries**
 
-   Ceramic matches exact keywords — it does not interpret natural language or synonyms automatically. Convert the user's natural language query into a keyword query of **2–8 words**.
+   Convert the user's question into keyword queries of **2–8 words**.
 
-   Rules:
-   - Extract specific entities, topics, locations, and dates
-   - Replace conversational phrasing with concrete keywords
-   - Do not include uninformative words such as articles (the, a, an). Avoid prepositions (on, about, in, for, of, at, by, with) unless they are within established phrases or names (United States of America, Into the Wild).
-   - Include relevant synonyms explicitly when terminology is ambiguous
-   - Keep word order meaningful (`house cat` and `cat house` return different results)
-   - Good keyword query examples:
-     - "2026 Super Bowl halftime performer"
-     - "climate change effects global warming impact"
-     - "beginner investing strategies stocks bonds basics"
+   - Extract specific entities, topics, locations, and dates.
+   - **Keep every hard constraint** from the question: the entity, city, state or country, year, product, company, team, league, or event. Dropping one returns results about the wrong thing.
+   - Do not include task words or filler such as `find`, `search`, `verify`, `latest`, `official page`, or publisher names, unless the word is part of what you are looking for.
+   - Do not include articles (the, a, an). Avoid prepositions (on, about, in, for, of, at, by, with) unless they are part of an established phrase or name (United States of America, Into the Wild).
+   - Add synonyms explicitly when terminology varies. Ceramic will not map them for you.
+   - Keep word order meaningful (`house cat` and `cat house` return different results).
+
+   | Question | Bad query | Good query |
+   |---|---|---|
+   | What are United Airlines' carry-on size limits? | `carry-on dimensions` | `United Airlines carry-on size` |
+   | Who performed at the Super Bowl halftime show this year? | `Super Bowl halftime show performer` | `2026 Super Bowl halftime performer` |
+   | Find the official schedule for Los Angeles bulky item pickup | `find official page schedule Los Angeles` | `Los Angeles bulky item pickup` |
+   | How do I start investing? | `how do I start investing` | `beginner investing strategies stocks bonds basics` |
+
+   For questions that aren't a simple lookup, run two or three variants and merge the results: one naming the entity (`FAA drone registration`), one using words likely to appear in the answer (`drone registration 250 grams`), and one with synonyms (`recreational drone weight limit`).
 
 2. **Run the search**
 
    Both methods accept the same parameters:
-   - `query` (required): the rewritten keyword query
+   - `query` (required): the keyword query
    - `maxDescriptionLength` (optional): characters per result description, 1000–8000. Omit it to use the default of 3000. Use a higher value only when the user needs more detail.
    - `maxResults` (optional): number of results, 1–20. Omit it to use the default of 10.
 
-   **Option A — Ceramic MCP tool (preferred when available).** If a Ceramic MCP tool named `ceramic_search` is available in your tool list, call it with the parameters above using the MCP tool invocation mechanism. Do not attempt to call it as a local function.
+   **Default — Ceramic MCP tool.** If a Ceramic MCP tool named `ceramic_search` is available in your tool list, call it with the parameters above using the MCP tool invocation mechanism. Do not attempt to call it as a local function.
 
-   ```json
-   {
-     "query": "2026 Super Bowl halftime performer"
-   }
-   ```
-
-   **Option B — Ceramic Search API.** If no `ceramic_search` MCP tool is available, call the API with `curl`. It reads the API key from the `CERAMIC_API_KEY` environment variable:
+   **Fallback — Ceramic Search API.** If no `ceramic_search` MCP tool is available, call the API with `curl`. It reads the API key from the `CERAMIC_API_KEY` environment variable:
 
    ```bash
    curl -sS https://api.ceramic.ai/search \
@@ -48,37 +47,25 @@ Lexical (keyword-based) search engine built for AI agents.
      -d '{"query": "2026 Super Bowl halftime performer"}'
    ```
 
+   The API returns the results under `result.results`, ordered by relevance. Each result has `title`, `url`, and `description`.
+
    If `CERAMIC_API_KEY` is not set, or the API returns `401`, stop and tell the user to create an API key at https://platform.ceramic.ai/keys and set it as the `CERAMIC_API_KEY` environment variable. Never print, echo, or log the API key.
 
-3. **Retrieve the top sources from the response**
+3. **Answer with citations**
 
-   Results are ordered by relevance, with the first result being the strongest match. Each result includes `title`, `url`, and `description`.
-
-   - The MCP tool returns a top-level `results` array. Each result also includes a `rank`.
-   - The API nests the array under `result.results`:
-
-     ```json
-     {
-       "requestId": "request id",
-       "result": {
-         "results": [
-           {
-             "title": "search result title",
-             "url": "search result url",
-             "description": "search result description"
-           }
-         ],
-         "totalResults": 10
-       }
-     }
-     ```
-
-4. **Summarize with citations**
-
-   Write a concise answer drawing from the search result descriptions, and then list sources as numbered references:
+   Write a concise answer from the result descriptions, then list the sources you used as numbered references:
 
    **Sources**
    1. [Title](url)
    2. [Title](url)
 
-   Only cite sources whose descriptions contributed to the answer. If the search returns no useful results, refine the query with more specific keywords and try again before giving up.
+   - Only cite sources whose descriptions contributed to the answer.
+   - Say when the evidence is weak, stale, incomplete, or not from an authoritative source, instead of presenting it as fact.
+   - If the results aren't useful, refine the query with more specific keywords and try again before giving up.
+
+# When Ceramic alone is not enough
+
+Ceramic returns indexed pages with text descriptions. Use another tool, or tell the user its limits, when the task needs:
+- Live structured data, such as weather, stock prices, sports scores, or flight status
+- The full content of a page beyond the result description
+- Paywalled or non-public content
