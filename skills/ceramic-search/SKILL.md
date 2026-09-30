@@ -59,7 +59,7 @@ Ceramic is a lexical (keyword-based) web search engine built for AI agents. It m
    1. [Title](url)
    2. [Title](url)
 
-   - Only cite sources whose descriptions contributed to the answer.
+   - Only cite URLs that appear in the search results, and only those whose descriptions contributed to the answer. Never add a URL from memory, even for an official source you expect to exist. You can suggest the user check an official site, but don't list it under **Sources**.
    - Say when the evidence is weak, stale, incomplete, or not from an authoritative source, instead of presenting it as fact.
    - If the results aren't useful, refine the query with more specific keywords and try again before giving up.
 
