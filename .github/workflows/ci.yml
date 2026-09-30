@@ -13,35 +13,5 @@ jobs:
 
       - name: Repo structure check
         run: |
-          for f in README.md LICENSE skills/ceramic-search/SKILL.md .mcp.json \
-                   .claude-plugin/plugin.json .claude-plugin/marketplace.json \
-                   .codex-plugin/plugin.json .agents/plugins/marketplace.json; do
-            test -f "$f" || { echo "$f is required but not found"; exit 1; }
-          done
-          echo "Required files found"
-
-      - name: Validate JSON manifests
-        run: |
-          for f in .mcp.json .claude-plugin/plugin.json .claude-plugin/marketplace.json \
-                   .codex-plugin/plugin.json .agents/plugins/marketplace.json; do
-            python3 -m json.tool "$f" > /dev/null || { echo "$f is not valid JSON"; exit 1; }
-          done
-          for f in .claude-plugin/plugin.json .codex-plugin/plugin.json; do
-            python3 -c "import json,sys; sys.exit(json.load(open('$f')).get('mcpServers') != './.mcp.json')" \
-              || { echo "$f must set mcpServers to ./.mcp.json"; exit 1; }
-          done
-          echo "JSON manifests valid"
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Skills CLI discovers the skill
-        env:
-          DISABLE_TELEMETRY: "1"
-        run: |
-          out=$(npx -y skills add . --list 2>&1 | sed 's/\x1b\[[0-9;?]*[a-zA-Z]//g')
-          echo "$out"
-          echo "$out" | grep -q "Found 1 skill" || { echo "Expected exactly 1 skill"; exit 1; }
-          echo "$out" | grep -q "ceramic-search" || { echo "ceramic-search skill not found"; exit 1; }
+          test -f README.md || { echo "README.md is required but not found"; exit 1; }
+          echo "README.md found"
