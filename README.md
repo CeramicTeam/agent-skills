@@ -28,17 +28,13 @@ Requires [Node.js](https://nodejs.org) and a Ceramic API key.
    export CERAMIC_API_KEY="your_api_key"
    ```
 
-2. Install the skill:
+2. Install the skill from your terminal:
 
    ```bash
    npx skills add CeramicTeam/agent-skills
    ```
 
-   The CLI detects your installed agents and asks where to install. To install globally for specific agents without prompts:
-
-   ```bash
-   npx skills add CeramicTeam/agent-skills --skill ceramic-search --agent cursor github-copilot --global -y
-   ```
+   The installer detects the coding agents on your machine and asks where to install the skill. For the installation scope, choose **Global** to use the skill in every project, or **Project** to install it only in the folder you ran the command from.
 
 3. Start a new agent session and ask for something that needs current information from the web.
 
