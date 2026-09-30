@@ -1,6 +1,6 @@
 ---
 name: ceramic-search
-description: Use this skill when the user needs current or verifiable information from the web — news, recent events, prices, releases, product or API documentation, or fact checks — even if they don't explicitly ask to search. Searches with Ceramic, a keyword-based web search engine. Not for questions answerable from the local codebase or files.
+description: Use this skill when the user needs current or verifiable information from the web — news, recent events, prices, releases, product or API documentation, or fact checks — even if they don't explicitly ask to search. Searches with Ceramic, a keyword-based web search engine.
 ---
 
 # Ceramic Search
@@ -15,7 +15,8 @@ Ceramic is a lexical (keyword-based) web search engine built for AI agents. It m
 
    - Extract specific entities, topics, locations, and dates.
    - **Keep every hard constraint** from the question: the entity, city, state or country, year, product, company, team, league, or event. Dropping one returns results about the wrong thing.
-   - Do not include task words or filler such as `find`, `search`, `verify`, `latest`, `official page`, or publisher names, unless the word is part of what you are looking for.
+   - Replace relative time words such as `latest`, `current`, `recent`, `this year`, or `today` with the specific year or date. Use the current date from your context, or run `date` if you're unsure.
+   - Do not include task words or filler such as `find`, `search`, `verify`, `official page`, or publisher names, unless the word is part of what you are looking for.
    - Do not include articles (the, a, an). Avoid prepositions (on, about, in, for, of, at, by, with) unless they are part of an established phrase or name (United States of America, Into the Wild).
    - Add synonyms explicitly when terminology varies. Ceramic will not map them for you.
    - Keep word order meaningful (`house cat` and `cat house` return different results).
@@ -23,7 +24,7 @@ Ceramic is a lexical (keyword-based) web search engine built for AI agents. It m
    | Question | Bad query | Good query |
    |---|---|---|
    | What are United Airlines' carry-on size limits? | `carry-on dimensions` | `United Airlines carry-on size` |
-   | Who performed at the Super Bowl halftime show this year? | `Super Bowl halftime show performer` | `2026 Super Bowl halftime performer` |
+   | Who performed at the Super Bowl halftime show this year? | `Super Bowl halftime show performer` | `2026 Super Bowl halftime performer` (if asked in 2026) |
    | Find the official schedule for Los Angeles bulky item pickup | `find official page schedule Los Angeles` | `Los Angeles bulky item pickup` |
    | How do I start investing? | `how do I start investing` | `beginner investing strategies stocks bonds basics` |
 
