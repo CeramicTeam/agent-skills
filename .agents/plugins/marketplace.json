@@ -1,0 +1,20 @@
+{
+  "name": "ceramic-ai",
+  "interface": {
+    "displayName": "Ceramic AI Plugins"
+  },
+  "plugins": [
+    {
+      "name": "ceramic-search",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
