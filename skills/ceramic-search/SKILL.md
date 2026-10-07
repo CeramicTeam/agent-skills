@@ -21,6 +21,11 @@ Ceramic is a lexical (keyword-based) web search engine built for AI agents. It m
    - Add synonyms explicitly when terminology varies. Ceramic will not map them for you.
    - Keep word order meaningful (`house cat` and `cat house` return different results).
 
+   **Never include these in a query:**
+   - Slashes. This means no URLs, links, or file paths
+   - Numbers with commas, such as `101,342`
+   - Non-Latin characters
+
    | Question | Bad query | Good query |
    |---|---|---|
    | What are United Airlines' carry-on size limits? | `carry-on dimensions` | `United Airlines carry-on size` |
